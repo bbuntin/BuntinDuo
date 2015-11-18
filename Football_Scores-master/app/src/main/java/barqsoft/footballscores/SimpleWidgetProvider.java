@@ -25,7 +25,7 @@ public class SimpleWidgetProvider extends AppWidgetProvider {
 
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                     R.layout.simple_widget);
-            remoteViews.setTextViewText(R.id.textView, number);
+            //remoteViews.setTextViewText(R.id.textView, number);
 
             Intent intent = new Intent(context, SimpleWidgetProvider.class);
             intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
@@ -34,7 +34,7 @@ public class SimpleWidgetProvider extends AppWidgetProvider {
                     0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-            remoteViews.setOnClickPendingIntent(R.id.actionButton, pendingIntent);
+            //remoteViews.setOnClickPendingIntent(R.id.actionButton, pendingIntent);
             appWidgetManager.updateAppWidget(widgetId, remoteViews);
         }
     }
