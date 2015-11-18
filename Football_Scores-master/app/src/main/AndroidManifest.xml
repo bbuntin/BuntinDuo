@@ -32,7 +32,9 @@
             android:name=".ScoresProvider"
             android:authorities="barqsoft.footballscores" />
 
-        <service android:name=".service.myFetchService"
+        <service android:name=".service.myFetchService" />
+
+        <service android:name=".service.myFetchServiceRemote"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <receiver android:name=".SimpleWidgetProvider" >

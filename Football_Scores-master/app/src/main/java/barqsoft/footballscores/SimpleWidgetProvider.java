@@ -1,14 +1,14 @@
 package barqsoft.footballscores;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import java.util.Random;
+import barqsoft.footballscores.service.myFetchServiceRemote;
 
 /**
  * Created by Bradley on 11/11/15.
@@ -18,8 +18,16 @@ public class SimpleWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         final int count = appWidgetIds.length;
-        Log.v("Buntin", String.valueOf(count));
         for (int i = 0; i < count; i++) {
+            Intent intent = new Intent(context, myFetchServiceRemote.class);
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
+            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+            RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.simple_widget);
+            rv.setRemoteAdapter(appWidgetIds[i], R.id.scores_list, intent);
+            rv.setEmptyView(R.id.scores_list, R.id.empty_view);
+            appWidgetManager.updateAppWidget(appWidgetIds[i], rv);
+
+/*
             int widgetId = appWidgetIds[i];
             String number = String.format("%03d", (new Random().nextInt(900) + 100));
 
@@ -35,7 +43,7 @@ public class SimpleWidgetProvider extends AppWidgetProvider {
 
 
             //remoteViews.setOnClickPendingIntent(R.id.actionButton, pendingIntent);
-            appWidgetManager.updateAppWidget(widgetId, remoteViews);
+            appWidgetManager.updateAppWidget(widgetId, remoteViews);*/
         }
     }
 

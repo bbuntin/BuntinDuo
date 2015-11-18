@@ -42,7 +42,7 @@ public class myFetchServiceRemote extends RemoteViewsService
         getData("n2");
         getData("p2");
 
-        return null;
+        return new StackRemoteViewsFactory(this.getApplicationContext(), intent);
     }
 
     private void getData (String timeFrame)
