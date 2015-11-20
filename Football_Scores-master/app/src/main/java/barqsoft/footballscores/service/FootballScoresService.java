@@ -4,11 +4,12 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
+import android.text.format.Time;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import barqsoft.footballscores.R;
-import barqsoft.footballscores.ScoresProvider;
 
 /**
  * Created by Bradley on 11/18/15.
@@ -43,11 +44,24 @@ class FootballScoresViewsFactory implements RemoteViewsService.RemoteViewsFactor
         if (mCursor != null){
             mCursor.close();
         }
+        Time now = new Time();
+        now.setToNow();
+        String[] fragmentdate = new String[1];
+        fragmentdate[0] = now.toString();
+        mCursor = mContext.getContentResolver().query(buildScoreWithDate(),null,null,fragmentdate,null);
 
-        need to know how a contentprovider works.. http://www.java2s.com/Code/Android/UI/WeatherListWidget.htm
-        mCursor = mContext.getContentResolver().query(ScoresProvider
-        )
     }
+
+    //URI data
+    public static final String CONTENT_AUTHORITY = "barqsoft.footballscores";
+    public static final String PATH = "scores";
+    public static Uri BASE_CONTENT_URI = Uri.parse("content://"+CONTENT_AUTHORITY);
+
+    public static Uri buildScoreWithDate()
+    {
+        return BASE_CONTENT_URI.buildUpon().appendPath("date").build();
+    }
+
 
     @Override
     public void onDestroy() {
@@ -66,10 +80,61 @@ class FootballScoresViewsFactory implements RemoteViewsService.RemoteViewsFactor
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.simple_widget);
         if (mCursor.moveToPosition(i)){
 
+            rv.setTextViewText(R.id.home_name, mCursor.getString(COL_HOME));
+            rv.setTextViewText(R.id.away_name, mCursor.getString(COL_AWAY));
+            /*rv.setTextViewText(R.id.score_textview, mCursor.getString(COL_HOME_GOALS));
+            rv.setTextViewText(R.id.data_textview, mCursor.getString(COL_HOME));
+            rv.setTextViewText(R.id.home_name, mCursor.getString(COL_HOME));
+
+            mHolder.home_name.setText(cursor.getString(COL_HOME));
+            mHolder.away_name.setText(cursor.getString(COL_AWAY));
+            mHolder.date.setText(cursor.getString(COL_MATCHTIME));
+            mHolder.score.setText(Utilies.getScores(cursor.getInt(COL_HOME_GOALS), cursor.getInt(COL_AWAY_GOALS)));
+            mHolder.match_id = cursor.getDouble(COL_ID);
+            mHolder.home_crest.setImageResource(Utilies.getTeamCrestByTeamName(
+                    cursor.getString(COL_HOME)));
+            mHolder.away_crest.setImageResource(Utilies.getTeamCrestByTeamName(
+                    cursor.getString(COL_AWAY)
+            ));
+            //Log.v(FetchScoreTask.LOG_TAG,mHolder.home_name.getText() + " Vs. " + mHolder.away_name.getText() +" id " + String.valueOf(mHolder.match_id));
+            //Log.v(FetchScoreTask.LOG_TAG,String.valueOf(detail_match_id));
+            LayoutInflater vi = (LayoutInflater) context.getApplicationContext()
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View v = vi.inflate(R.layout.detail_fragment, null);
+            ViewGroup container = (ViewGroup) view.f
+
+
+            public TextView home_name;
+            public TextView away_name;
+            public TextView score;
+            public TextView date;
+            public ImageView home_crest;
+            public ImageView away_crest;
+            public double match_id;
+
+            home_name = (TextView) view.findViewById(R.id.home_name);
+            away_name = (TextView) view.findViewById(R.id.away_name);
+            score     = (TextView) view.findViewById(R.id.score_textview);
+            date      = (TextView) view.findViewById(R.id.data_textview);
+            home_crest = (ImageView) view.findViewById(R.id.home_crest);
+            away_crest = (ImageView) view.findViewById(R.id.away_crest); */
+
+
+
+
+
+
         }
 
         return rv;
     }
+
+    public static final int COL_HOME = 3;
+    public static final int COL_AWAY = 4;
+    public static final int COL_HOME_GOALS = 6;
+    public static final int COL_AWAY_GOALS = 7;
+    public static final int COL_ID = 8;
+    public static final int COL_MATCHTIME = 2;
 
     @Override
     public RemoteViews getLoadingView() {
