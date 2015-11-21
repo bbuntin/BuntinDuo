@@ -22,6 +22,7 @@ public class SimpleWidgetProvider extends AppWidgetProvider {
             Intent intent = new Intent(context, FootballScoresService.class);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+            String packageName = context.getPackageName();
             RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.simple_widget);
             rv.setRemoteAdapter(appWidgetIds[i], R.id.scores_list, intent);
             rv.setEmptyView(R.id.scores_list, R.id.empty_view);

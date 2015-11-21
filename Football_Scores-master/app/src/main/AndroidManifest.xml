@@ -3,6 +3,7 @@
     package="barqsoft.footballscores" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="barqsoft.footballscores.ScoresProvider" />
 
     <application
         android:allowBackup="true"
@@ -30,11 +31,15 @@
 
         <provider
             android:name=".ScoresProvider"
-            android:authorities="barqsoft.footballscores" />
+            android:authorities="barqsoft.footballscores"
+            android:grantUriPermissions="true">
+
+           />
+        </provider>
 
         <service android:name=".service.myFetchService" />
 
-        <service android:name=".service.myFetchServiceRemote"
+        <service android:name=".service.FootballScoresService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <receiver android:name=".SimpleWidgetProvider" >

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Binder;
 import android.text.format.Time;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -47,9 +48,14 @@ class FootballScoresViewsFactory implements RemoteViewsService.RemoteViewsFactor
         Time now = new Time();
         now.setToNow();
         String[] fragmentdate = new String[1];
-        fragmentdate[0] = now.toString();
-        mCursor = mContext.getContentResolver().query(buildScoreWithDate(),null,null,fragmentdate,null);
+        fragmentdate[0] = "2015-11-21"; //now.toString();
 
+        final long token = Binder.clearCallingIdentity();
+        try {
+            mCursor = mContext.getContentResolver().query(buildScoreWithDate(),null,null,fragmentdate,null);
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
     }
 
     //URI data
