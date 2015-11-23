@@ -10,9 +10,12 @@ import android.text.format.Time;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import barqsoft.footballscores.R;
+import barqsoft.footballscores.Utilies;
 
 /**
  * Created by Bradley on 11/18/15.
@@ -54,8 +57,12 @@ class FootballScoresViewsFactory implements RemoteViewsService.RemoteViewsFactor
         Time now = new Time();
         now.setToNow();
         String[] fragmentdate = new String[1];
-        fragmentdate[0] = "2015-11-21"; //now.toString();
 
+        Date fragmentdateToday = new Date(System.currentTimeMillis());
+        SimpleDateFormat mformat = new SimpleDateFormat("yyyy-MM-dd");
+        String date=mformat.format(fragmentdateToday);
+
+        fragmentdate[0] = date;
         final long token = Binder.clearCallingIdentity();
         try {
             mCursor = mContext.getContentResolver().query(buildScoreWithDate(),null,null,fragmentdate,null);
@@ -90,58 +97,15 @@ class FootballScoresViewsFactory implements RemoteViewsService.RemoteViewsFactor
 
     @Override
     public RemoteViews getViewAt(int i) {
-        RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.simple_widget2);
+        RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.scores_list_item_widget);
         if (mCursor.moveToPosition(i)){
-
-
-            rv.setTextViewText(R.id.textView, mCursor.getString(COL_HOME));
-            //rv.setTextViewText(R.id.away_name, mCursor.getString(COL_AWAY));
-            //rv.setTextViewText(R.id.score_textview, mCursor.getString(CO));
-
-            /*rv.setTextViewText(R.id.score_textview, mCursor.getString(COL_HOME_GOALS));
-            rv.setTextViewText(R.id.data_textview, mCursor.getString(COL_HOME));
             rv.setTextViewText(R.id.home_name, mCursor.getString(COL_HOME));
-
-            mHolder.home_name.setText(cursor.getString(COL_HOME));
-            mHolder.away_name.setText(cursor.getString(COL_AWAY));
-            mHolder.date.setText(cursor.getString(COL_MATCHTIME));
-            mHolder.score.setText(Utilies.getScores(cursor.getInt(COL_HOME_GOALS), cursor.getInt(COL_AWAY_GOALS)));
-            mHolder.match_id = cursor.getDouble(COL_ID);
-            mHolder.home_crest.setImageResource(Utilies.getTeamCrestByTeamName(
-                    cursor.getString(COL_HOME)));
-            mHolder.away_crest.setImageResource(Utilies.getTeamCrestByTeamName(
-                    cursor.getString(COL_AWAY)
-            ));
-            //Log.v(FetchScoreTask.LOG_TAG,mHolder.home_name.getText() + " Vs. " + mHolder.away_name.getText() +" id " + String.valueOf(mHolder.match_id));
-            //Log.v(FetchScoreTask.LOG_TAG,String.valueOf(detail_match_id));
-            LayoutInflater vi = (LayoutInflater) context.getApplicationContext()
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View v = vi.inflate(R.layout.detail_fragment, null);
-            ViewGroup container = (ViewGroup) view.f
-
-
-            public TextView home_name;
-            public TextView away_name;
-            public TextView score;
-            public TextView date;
-            public ImageView home_crest;
-            public ImageView away_crest;
-            public double match_id;
-
-            home_name = (TextView) view.findViewById(R.id.home_name);
-            away_name = (TextView) view.findViewById(R.id.away_name);
-            score     = (TextView) view.findViewById(R.id.score_textview);
-            date      = (TextView) view.findViewById(R.id.data_textview);
-            home_crest = (ImageView) view.findViewById(R.id.home_crest);
-            away_crest = (ImageView) view.findViewById(R.id.away_crest); */
-
-
-
-
-
-
+            rv.setTextViewText(R.id.away_name, mCursor.getString(COL_AWAY));
+            rv.setImageViewResource(R.id.home_crest, Utilies.getTeamCrestByTeamName(mCursor.getString(COL_HOME)));
+            rv.setImageViewResource(R.id.away_crest, Utilies.getTeamCrestByTeamName(mCursor.getString(COL_AWAY)));
+            rv.setTextViewText(R.id.score_textview, Utilies.getScores(mCursor.getInt(COL_HOME_GOALS), mCursor.getInt(COL_AWAY_GOALS)));
+            rv.setTextViewText(R.id.data_textview, mCursor.getString(COL_MATCHTIME));
         }
-
         return rv;
     }
 
