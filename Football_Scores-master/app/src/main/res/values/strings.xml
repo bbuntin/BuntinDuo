@@ -38,5 +38,5 @@
     <string name="share">Share</string>
     <string name="title_activity_simple_widget_config">SimpleWidgetConfig</string>
     <string name="empty_view_text">No Scores Available For Today</string>
-    <string name="todays_football_scores">Today\'s Football Scores</string>
+    <string name="todays_football_scores">Football Scores</string>
 </resources>

@@ -108,7 +108,7 @@ class FootballScoresViewsFactory implements RemoteViewsService.RemoteViewsFactor
 
             Intent fillInIntent = new Intent();
             //fillInIntent.putExtra(Widget.EXTRA_LIST_VIEW_ROW_NUMBER, i);
-            //rv.setOnClickFillInIntent(R.id.list_view_row, fillInIntent);
+            rv.setOnClickFillInIntent(R.id.id_widget_list_task_name, fillInIntent);
         }
         return rv;
     }
