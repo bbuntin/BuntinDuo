@@ -10,6 +10,8 @@ import android.text.format.Time;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import java.util.ArrayList;
+
 import barqsoft.footballscores.R;
 
 /**
@@ -18,22 +20,26 @@ import barqsoft.footballscores.R;
 public class FootballScoresService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new FootballScoresViewsFactory(this.getApplicationContext(), intent);
+        int appWidgetId = intent.getIntExtra(
+                AppWidgetManager.EXTRA_APPWIDGET_ID,
+                AppWidgetManager.INVALID_APPWIDGET_ID);
+        return (new FootballScoresViewsFactory(this.getApplicationContext(), intent));
     }
 }
 
 class FootballScoresViewsFactory implements RemoteViewsService.RemoteViewsFactory{
 
     private static final int mCount = 10;
-    //private List<WidgetItem> mWidgetItems = new ArrayList<WidgetItem>();
+    private ArrayList listItemList = new ArrayList();
     private Context mContext;
     private int mAppWidgetId;
     private Cursor mCursor;
 
-    public FootballScoresViewsFactory(Context context, Intent intent){
+    public FootballScoresViewsFactory(Context context, Intent intent) {
         mContext = context;
         mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
     }
+
 
     @Override
     public void onCreate() {
@@ -78,16 +84,20 @@ class FootballScoresViewsFactory implements RemoteViewsService.RemoteViewsFactor
 
     @Override
     public int getCount() {
+        int count = mCursor.getCount();
         return mCursor.getCount();
     }
 
     @Override
     public RemoteViews getViewAt(int i) {
-        RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.simple_widget);
+        RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.simple_widget2);
         if (mCursor.moveToPosition(i)){
 
-            rv.setTextViewText(R.id.home_name, mCursor.getString(COL_HOME));
-            rv.setTextViewText(R.id.away_name, mCursor.getString(COL_AWAY));
+
+            rv.setTextViewText(R.id.textView, mCursor.getString(COL_HOME));
+            //rv.setTextViewText(R.id.away_name, mCursor.getString(COL_AWAY));
+            //rv.setTextViewText(R.id.score_textview, mCursor.getString(CO));
+
             /*rv.setTextViewText(R.id.score_textview, mCursor.getString(COL_HOME_GOALS));
             rv.setTextViewText(R.id.data_textview, mCursor.getString(COL_HOME));
             rv.setTextViewText(R.id.home_name, mCursor.getString(COL_HOME));
@@ -149,12 +159,12 @@ class FootballScoresViewsFactory implements RemoteViewsService.RemoteViewsFactor
 
     @Override
     public int getViewTypeCount() {
-        return 0;
+        return 1;
     }
 
     @Override
     public long getItemId(int i) {
-        return 0;
+        return i;
     }
 
     @Override
