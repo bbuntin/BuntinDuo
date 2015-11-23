@@ -1,5 +1,6 @@
 package barqsoft.footballscores;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -20,15 +21,10 @@ public class SimpleWidgetProvider extends AppWidgetProvider {
         final int count = appWidgetIds.length;
         for (int i = 0; i < count; i++) {
             RemoteViews remoteViews = updateWidgetListView(context, appWidgetIds[i]);
+            Intent startActivityIntent = new Intent(context, MainActivity.class);
+            PendingIntent startActivityPendingIntent = PendingIntent.getActivity(context, 0, startActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            remoteViews.setPendingIntentTemplate(R.id.listViewWidget, startActivityPendingIntent);
             appWidgetManager.updateAppWidget(appWidgetIds[i], remoteViews);
-            //Intent intent = new Intent(context, FootballScoresService.class);
-            //intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
-            //intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-            //String packageName = context.getPackageName();
-            //RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.simple_widget);
-            //rv.setRemoteAdapter(R.id.scores_list, intent);
-            //rv.setEmptyView(R.id.scores_list, R.id.empty_view);
-            //appWidgetManager.updateAppWidget(appWidgetIds[i], rv);
         }
     }
 

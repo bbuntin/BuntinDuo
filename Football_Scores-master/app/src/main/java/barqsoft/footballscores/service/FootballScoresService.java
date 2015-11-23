@@ -105,6 +105,10 @@ class FootballScoresViewsFactory implements RemoteViewsService.RemoteViewsFactor
             rv.setImageViewResource(R.id.away_crest, Utilies.getTeamCrestByTeamName(mCursor.getString(COL_AWAY)));
             rv.setTextViewText(R.id.score_textview, Utilies.getScores(mCursor.getInt(COL_HOME_GOALS), mCursor.getInt(COL_AWAY_GOALS)));
             rv.setTextViewText(R.id.data_textview, mCursor.getString(COL_MATCHTIME));
+
+            Intent fillInIntent = new Intent();
+            //fillInIntent.putExtra(Widget.EXTRA_LIST_VIEW_ROW_NUMBER, i);
+            //rv.setOnClickFillInIntent(R.id.list_view_row, fillInIntent);
         }
         return rv;
     }
